@@ -55,7 +55,7 @@ class Router:
         routes = get_routes("views")
 
         if e.route in routes:
-            e.page.views.append(routes[e.route]())
+            e.page.views.append(routes[e.route](e.page))
         else:
             e.page.views.append(PageNotFoundView())
 
