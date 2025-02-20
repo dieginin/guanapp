@@ -15,7 +15,6 @@ class _ButtonRow(ft.Row):
 class HomeView(ft.View):
     def __init__(self, page: ft.Page) -> None:
         super().__init__()
-        self.route = "/"
         page.theme = ft.Theme(color_scheme_seed="blue")
 
         self.__init__config()
@@ -30,8 +29,8 @@ class HomeView(ft.View):
         subtitle = Subtitle("¿Qué quieres hacer hoy?")
 
         cli_btn = PrimaryButton("Clientes", on_click=self.__clientes)
-        cons_btn = CustomButton("green", "Constancia", on_click=self.__constancia)
-        coti_btn = CustomButton("orange", "Cotización", on_click=self.__cotizacion)
+        cons_btn = CustomButton("green", "Constancias", on_click=self.__constancias)
+        coti_btn = CustomButton("orange", "Cotizaciónes", on_click=self.__cotizaciones)
 
         btns_one = _ButtonRow([cons_btn, coti_btn])
         btns_two = _ButtonRow([cli_btn])
@@ -44,11 +43,11 @@ class HomeView(ft.View):
             e.page, "Esta sección aún no está lista, contacta al programador"
         )
 
-    def __constancia(self, e: ft.ControlEvent) -> None:
-        # TODO Agregar sección constancia
+    def __constancias(self, e: ft.ControlEvent) -> None:
+        # TODO Agregar sección constancias
         error_snackbar(
             e.page, "Esta sección aún no está lista, contacta al programador"
         )
 
-    def __cotizacion(self, e: ft.ControlEvent) -> None:
+    def __cotizaciones(self, e: ft.ControlEvent) -> None:
         e.page.go("/cotizar")
