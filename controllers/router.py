@@ -34,8 +34,6 @@ def get_routes(directory: str) -> dict:
 class PageNotFoundView(ft.View):
     def __init__(self) -> None:
         super().__init__()
-        self.route = "/pageNotFound"
-
         self.horizontal_alignment = ft.CrossAxisAlignment.CENTER
         self.vertical_alignment = ft.MainAxisAlignment.CENTER
 
