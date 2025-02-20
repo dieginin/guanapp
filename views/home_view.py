@@ -30,7 +30,7 @@ class HomeView(ft.View):
 
         cli_btn = PrimaryButton("Clientes", on_click=self.__clientes)
         cons_btn = CustomButton("green", "Constancias", on_click=self.__constancias)
-        coti_btn = CustomButton("orange", "Cotizaciónes", on_click=self.__cotizaciones)
+        coti_btn = CustomButton("orange", "Cotizaciones", on_click=self.__cotizaciones)
 
         btns_one = _ButtonRow([cons_btn, coti_btn])
         btns_two = _ButtonRow([cli_btn])
