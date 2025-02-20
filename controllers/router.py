@@ -19,9 +19,9 @@ def get_routes(directory: str) -> dict:
                     and issubclass(attr, ft.View)
                     and attr != ft.View
                 ):
-                    route = "/" + attr_name[0].lower() + attr_name[1:]
+                    route = "/" + attr_name.lower()
 
-                    if route.endswith("View"):
+                    if route.endswith("view"):
                         route = route[:-4]
                     if route == "/home":
                         route = "/"
