@@ -5,3 +5,4 @@ from .buttons import (
     SecondaryButton,
     TertiaryButton,
 )
+from .text import Subtitle, Title
