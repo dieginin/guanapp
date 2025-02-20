@@ -1,7 +1,6 @@
 import flet as ft
 
-from components import PrimaryButton, Title
-from components.buttons import CustomButton
+from components import CustomButton, PrimaryButton, Title
 
 
 class _ButtonRow(ft.Row):
@@ -30,6 +29,8 @@ class CotizacionesView(ft.View):
 
         hom_btn = CustomButton("blue", "Inicio", on_click=self.__home)
         nue_btn = PrimaryButton("Nuevo Cliente", on_click=self.__nueva)
+
+        # TODO cli_lst = ft.ListView()
 
         btns = _ButtonRow([hom_btn, nue_btn])
 
