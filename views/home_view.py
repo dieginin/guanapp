@@ -39,11 +39,13 @@ class HomeView(ft.View):
         self.controls = [title, subtitle, ft.Container(height=35), btns_one, btns_two]
 
     def __clientes(self, e: ft.ControlEvent) -> None:
+        # TODO Agregar sección clientes
         error_snackbar(
             e.page, "Esta sección aún no está lista, contacta al programador"
         )
 
     def __constancia(self, e: ft.ControlEvent) -> None:
+        # TODO Agregar sección constancia
         error_snackbar(
             e.page, "Esta sección aún no está lista, contacta al programador"
         )
