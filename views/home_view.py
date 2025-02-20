@@ -16,6 +16,7 @@ class HomeView(ft.View):
     def __init__(self, page: ft.Page) -> None:
         super().__init__()
         page.theme = ft.Theme(color_scheme_seed="blue")
+        page.title = "GuanApp"
 
         self.__init__config()
         self.__init_components__()
