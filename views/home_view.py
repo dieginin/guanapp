@@ -1,15 +1,7 @@
 import flet as ft
 
-from components import CustomButton, PrimaryButton, Subtitle, Title
+from components import ButtonRow, CustomButton, PrimaryButton, Subtitle, Title
 from controllers import error_snackbar
-
-
-class _ButtonRow(ft.Row):
-    def __init__(self, buttons: list[ft.ElevatedButton]) -> None:
-        super().__init__()
-        self.controls = buttons
-        self.alignment = ft.MainAxisAlignment.CENTER
-        self.spacing = 75
 
 
 class HomeView(ft.View):
@@ -33,8 +25,8 @@ class HomeView(ft.View):
         cons_btn = CustomButton("green", "Constancias", on_click=self.__constancias)
         coti_btn = CustomButton("orange", "Cotizaciones", on_click=self.__cotizaciones)
 
-        btns_one = _ButtonRow([cons_btn, coti_btn])
-        btns_two = _ButtonRow([cli_btn])
+        btns_one = ButtonRow([cons_btn, coti_btn])
+        btns_two = ButtonRow([cli_btn])
 
         self.controls = [title, subtitle, ft.Container(height=35), btns_one, btns_two]
 
