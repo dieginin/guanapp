@@ -5,5 +5,5 @@ from .buttons import (
     SecondaryButton,
     TertiaryButton,
 )
-from .text import Subtitle, Title
+from .text import RegularText, Subtitle, Title
 from .uix import ButtonRow

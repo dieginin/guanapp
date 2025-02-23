@@ -22,3 +22,10 @@ class Subtitle(__Text):
         super().__init__(value)
         self.color = "outline"
         self.size = 60
+
+
+class RegularText(__Text):
+    def __init__(self, value: Optional[str] = None, size: int = 48) -> None:
+        super().__init__(value)
+        self.color = "outline"
+        self.size = size
