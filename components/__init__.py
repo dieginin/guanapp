@@ -6,4 +6,4 @@ from .buttons import (
     TertiaryButton,
 )
 from .text import RegularText, Subtitle, Title
-from .uix import ButtonRow
+from .uix import BottomSheet, ButtonRow
