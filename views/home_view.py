@@ -16,6 +16,7 @@ class HomeView(ft.View):
     def __init__config(self) -> None:
         self.vertical_alignment = ft.MainAxisAlignment.CENTER
         self.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+        self.padding = 0
 
     def __init_components__(self) -> None:
         title = Title("GuanApp")
