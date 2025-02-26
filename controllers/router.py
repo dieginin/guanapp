@@ -2,6 +2,8 @@ import os
 
 import flet as ft
 
+from .firebase import Firebase
+
 
 def get_routes(directory: str) -> dict:
     routes = {}
@@ -32,7 +34,7 @@ def get_routes(directory: str) -> dict:
 
 
 class PageNotFoundView(ft.View):
-    def __init__(self) -> None:
+    def __init__(self, *_) -> None:
         super().__init__()
         self.horizontal_alignment = ft.CrossAxisAlignment.CENTER
         self.vertical_alignment = ft.MainAxisAlignment.CENTER
@@ -49,12 +51,28 @@ class Router:
         page.go("/")
 
     def on_route_change(self, e: ft.RouteChangeEvent) -> None:
+        troute = ft.TemplateRoute(e.route)
         e.page.views.clear()
         routes = get_routes("views")
 
-        if e.route in routes:
-            e.page.views.append(routes[e.route](e.page))
+        if troute.route.count("/") == 1:
+            self.__handle_standard_route(e, troute, routes)
         else:
-            e.page.views.append(PageNotFoundView())
-
+            self.__handle_dynamic_route(e, troute, routes)
         e.page.update()
+
+    def __handle_standard_route(
+        self, e: ft.RouteChangeEvent, troute: ft.TemplateRoute, routes: dict
+    ) -> None:
+        route = troute.route
+        view = routes.get(route, PageNotFoundView)
+        e.page.views.append(view(e.page))
+
+    def __handle_dynamic_route(
+        self, e: ft.RouteChangeEvent, troute: ft.TemplateRoute, routes: dict
+    ) -> None:
+        if troute.match("/nuevacotizacion/:uid"):
+            customer = Firebase().get_customer_by_uid(troute.uid)  # type: ignore
+            route = troute.route.split("/")[0]
+            view = routes.get(route, PageNotFoundView)
+            e.page.views.append(view(e.page, customer))
