@@ -91,7 +91,9 @@ class NameField(__TextField):
         )
         self.autofill_hints = ft.AutofillHint.NAME
         self.capitalization = ft.TextCapitalization.WORDS
-        self.input_filter = ft.InputFilter(r"^[A-Za-z'\.\-\s]+|$")
+        self.input_filter = ft.InputFilter(
+            r"^[A-Za-z'\.\-\s]+|$"
+        )  # BUG Filter not working
         self.keyboard_type = ft.KeyboardType.NAME
 
 
@@ -121,7 +123,9 @@ class AddressField(__TextField):
         )
         self.autofill_hints = ft.AutofillHint.ADDRESS_CITY_AND_STATE
         self.capitalization = ft.TextCapitalization.SENTENCES
-        self.input_filter = ft.InputFilter(r"^[A-Za-z0-9'\.\-\s\,]+|$")
+        self.input_filter = ft.InputFilter(
+            r"^[A-Za-z0-9'\.\-\s\,]+|$"
+        )  # BUG Filter not working
         self.keyboard_type = ft.KeyboardType.STREET_ADDRESS
 
 
@@ -149,7 +153,9 @@ class NumberField(__TextField):
             on_blur,
             width,
         )
-        self.input_filter = ft.InputFilter(r"^([0-9]*[.])?[0-9]+|$")
+        self.input_filter = ft.InputFilter(
+            r"^([0-9]*[.])?[0-9]+|$"
+        )  # BUG Filter not working
         self.keyboard_type = ft.KeyboardType.NUMBER
 
 
@@ -178,5 +184,7 @@ class EmailField(__TextField):
             width,
         )
         self.autofill_hints = ft.AutofillHint.EMAIL
-        self.input_filter = ft.InputFilter(r"^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}|$")
+        self.input_filter = ft.InputFilter(
+            r"^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}|$"
+        )  # BUG Filter not working
         self.keyboard_type = ft.KeyboardType.EMAIL
