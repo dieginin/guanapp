@@ -20,7 +20,8 @@ class __TextField(ft.TextField):
         self.value = value
         self.label = label
         self.autofocus = autofocus
-        self.on_change = on_change
+        self._pre_on_change = on_change
+        self.on_change = self._on_change
         self.on_click = on_click
         self.on_submit = on_submit
         self.on_focus = on_focus
@@ -28,6 +29,13 @@ class __TextField(ft.TextField):
         self.width = width
         self.border = ft.InputBorder.UNDERLINE
         self.focused_border_width = 3
+
+    def _on_change(self, e: ft.ControlEvent) -> None:
+        self.error_text = None
+        self.update()
+
+        if self._pre_on_change:
+            self._pre_on_change(e)
 
 
 class RegularField(__TextField):
