@@ -1,14 +1,16 @@
+from dataclasses import dataclass
 from typing import Optional
 
 
+@dataclass
 class Customer:
-    def __init__(
-        self, uid: str, name: str, address: str, email: Optional[str] = None
-    ) -> None:
-        self.uid = uid
-        self.name = name
-        self.address = address
-        self.email = email
+    uid: str
+    name: str
+    address: str
+    email: Optional[str] = None
+
+    def __str__(self) -> str:
+        return self.uid
 
     def to_dict(self) -> dict:
         return {"name": self.name, "address": self.address, "email": self.email}
