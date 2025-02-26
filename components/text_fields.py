@@ -135,6 +135,7 @@ class NumberField(__TextField):
         value: Optional[str] = None,
         label: Optional[str] = None,
         autofocus: Optional[bool] = None,
+        allow_float: Optional[bool] = False,
         on_change: Optional[Callable] = None,
         on_click: Optional[Callable] = None,
         on_submit: Optional[Callable] = None,
@@ -154,7 +155,7 @@ class NumberField(__TextField):
             width,
         )
         self.input_filter = ft.InputFilter(
-            r"^([0-9]*[.])?[0-9]+|$"
+            r"^([0-9]*[.])?[0-9]+|$" if allow_float else r"^[0-9]+|$"
         )  # BUG Filter not working
         self.keyboard_type = ft.KeyboardType.NUMBER
 
