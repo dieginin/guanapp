@@ -6,7 +6,7 @@ def __show_snackbar(
     page: ft.Page, text: str, txtcolor: ColorValue, bgcolor: ColorValue
 ) -> None:
     txt = ft.Text(text, text_align=ft.TextAlign.CENTER, color=txtcolor)
-    page.open(ft.SnackBar(txt, bgcolor=bgcolor))
+    page.open(ft.SnackBar(txt, show_close_icon=True, bgcolor=bgcolor))
 
 
 def custom_snackbar(
