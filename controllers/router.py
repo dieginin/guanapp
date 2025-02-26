@@ -73,6 +73,6 @@ class Router:
     ) -> None:
         if troute.match("/nuevacotizacion/:uid"):
             customer = Firebase().get_customer_by_uid(troute.uid)  # type: ignore
-            route = troute.route.split("/")[0]
+            route = "/" + troute.route.split("/")[1]
             view = routes.get(route, PageNotFoundView)
             e.page.views.append(view(e.page, customer))
