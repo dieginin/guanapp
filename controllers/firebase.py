@@ -43,6 +43,12 @@ class Firebase:
                 pass
         return self._cached_customers
 
+    def get_customer_by_uid(self, uid: str) -> Customer:
+        customer = self.__customers_tb.child(uid).get().val()
+        if type(customer) == pyrebase.OrderedDict:
+            return Customer.from_dict({"uid": uid} | customer)
+        return Customer("", "", "")
+
     def create_customer(
         self, name: str, address: str, email: Optional[str] = None
     ) -> Response:
