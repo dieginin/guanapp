@@ -136,6 +136,7 @@ class NuevaCotizacionView(ft.View):
 
     def __cotizar(self, e: ft.ControlEvent) -> None:
         rows = self.datatable.rows or []
+        vigency = self.__get_field_value(self.vigencia_fld) or ""
 
         concepts = []
         for i, row in enumerate(rows):
@@ -173,7 +174,7 @@ class NuevaCotizacionView(ft.View):
 
         cl.start_loading(e.page)
         fb = cl.Firebase()
-        res = fb.create_quote(self.customer, concepts)
+        res = fb.create_quote(self.customer, concepts, vigency)
         cl.finish_loading(e.page)
 
         if res.status == "Success":

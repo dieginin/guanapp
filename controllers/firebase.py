@@ -98,10 +98,17 @@ class Firebase:
         self.__clear_customers_cache()
         return Response("Success", f"{deleted_amnt} clientes eliminados")
 
-    def create_quote(self, customer: Customer, concepts: list[dict]) -> Response:
+    def create_quote(
+        self, customer: Customer, concepts: list[dict], vigency: str
+    ) -> Response:
         next_quote = str(self.next_quote_index)
         date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         self.__quotes_tb.child(next_quote).set(
-            {"customer": customer.uid, "date": date, "concepts": concepts}
+            {
+                "customer": customer.uid,
+                "date": date,
+                "concepts": concepts,
+                "vigency": vigency,
+            }
         )
         return Response("Success", f"Cotización {next_quote} fue creada")
