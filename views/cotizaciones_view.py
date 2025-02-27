@@ -1,7 +1,7 @@
 import flet as ft
 
 import components as cp
-from controllers import Firebase, error_snackbar, success_snackbar
+import controllers as cl
 
 
 class CotizacionesView(ft.View):
@@ -37,7 +37,7 @@ class CotizacionesView(ft.View):
         self.controls = [title, btns, self.clients_lst, self.no_customers]
 
     def __get_customers(self) -> None:
-        fb = Firebase()
+        fb = cl.Firebase()
         customers = fb.customers_list
         self.clients_lst.controls.clear()
 
@@ -77,20 +77,23 @@ class CotizacionesView(ft.View):
                 return
 
             client_sheet.open = False
-            e.page.overlay.append(ft.ProgressBar())
             e.page.update()
 
-            fb = Firebase()
+            cl.start_loading(e.page)
+            fb = cl.Firebase()
             res = fb.create_customer(name, address, email)
+            cl.finish_loading(e.page)
 
-            e.page.overlay.pop()
             if res.status == "Success":
+                cl.start_loading(e.page)
                 self.__get_customers()
+                cl.finish_loading(e.page)
+
                 self.clients_lst.scroll_to(0, duration=1000)
                 self.no_customers.update()
-                success_snackbar(e.page, res.message)
+                cl.success_snackbar(e.page, res.message)
             else:
-                error_snackbar(e.page, res.message)
+                cl.error_snackbar(e.page, res.message)
 
         txt = cp.RegularText("Por favor ingresa los datos del cliente", 30)
         name_fld = cp.NameField(label="Nombre", autofocus=True, on_submit=_save)
@@ -102,4 +105,6 @@ class CotizacionesView(ft.View):
         e.page.open(client_sheet)
 
     def __customer_click(self, e: ft.ControlEvent) -> None:
+        cl.start_loading(e.page)
         e.page.go(f"/nuevacotizacion/{e.control.data}")
+        cl.finish_loading(e.page)

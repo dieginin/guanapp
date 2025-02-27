@@ -1,7 +1,7 @@
 import flet as ft
 
 from components import ButtonRow, CustomButton, PrimaryButton, Subtitle, Title
-from controllers import error_snackbar
+from controllers import error_snackbar, finish_loading, start_loading
 
 
 class HomeView(ft.View):
@@ -44,4 +44,6 @@ class HomeView(ft.View):
         )
 
     def __cotizaciones(self, e: ft.ControlEvent) -> None:
+        start_loading(e.page)
         e.page.go("/cotizaciones")
+        finish_loading(e.page)
