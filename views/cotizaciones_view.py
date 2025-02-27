@@ -79,6 +79,7 @@ class CotizacionesView(ft.View):
             e.page.overlay.pop()
             if res.status == "Success":
                 self.__get_customers()
+                self.clients_lst.scroll_to(0, duration=1000)
                 self.clients_lst.update()
                 success_snackbar(e.page, res.message)
             else:
