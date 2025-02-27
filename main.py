@@ -1,6 +1,10 @@
+import locale
+
 import flet as ft
 
 from controllers import Router
+
+locale.setlocale(locale.LC_TIME, "es_ES.UTF-8")
 
 
 class Main:
