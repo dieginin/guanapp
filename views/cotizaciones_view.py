@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import flet as ft
 
 import components as cp
@@ -38,23 +40,43 @@ class CotizacionesView(ft.View):
 
     def __get_customers(self) -> None:
         fb = cl.Firebase()
-        customers = fb.customers_list
+        customers = fb.customers_list or []
+        quotes = fb.quotes_list or []
+
         self.clients_lst.controls.clear()
 
-        if customers:
-            for customer in customers:
-                self.clients_lst.controls.insert(
-                    0,
-                    ft.ListTile(
-                        cp.RegularText(customer.name, 32),
-                        cp.RegularText(
-                            "Última cotización: S/D", 16
-                        ),  # TODO Obtener ultima cotizacion
-                        leading=ft.Icon("person_pin", size=50),
-                        on_click=self.__customer_click,
-                        data=customer,
-                    ),
-                )
+        customers_with_last_quote = []
+        for customer in customers:
+            customer_quotes = [q for q in quotes if q.customer.uid == customer.uid]
+            last_quote = customer_quotes[-1].date if customer_quotes else None
+            customers_with_last_quote.append(
+                {"customer": customer, "last_quote": last_quote}
+            )
+
+        customers_with_last_quote.sort(
+            key=lambda x: (
+                x["last_quote"] if x["last_quote"] is not None else datetime.max
+            )
+        )
+
+        for entry in customers_with_last_quote:
+            customer = entry["customer"]
+            last_quote = (
+                entry["last_quote"].strftime("%d de %B del %Y a las %-I:%M %p")
+                if entry["last_quote"]
+                else "S/C"
+            )
+            self.clients_lst.controls.insert(
+                0,
+                ft.ListTile(
+                    cp.RegularText(customer.name, 32),
+                    cp.RegularText(f"Última cotización: {last_quote}", 16),
+                    leading=ft.Icon("person_pin", size=50),
+                    on_click=self.__customer_click,
+                    data=customer,
+                ),  # TODO añadir accion de imprimir ultima cotizacion
+            )
+
         self.clients_lst.visible = len(self.clients_lst.controls) > 0
         self.no_customers.visible = len(self.clients_lst.controls) <= 0
 
