@@ -25,11 +25,16 @@ class CotizacionesView(ft.View):
         new_btn = cp.PrimaryButton("Nuevo Cliente", on_click=self.__new)
 
         self.clients_lst = ft.ListView(expand=True)
+        self.no_customers = ft.Container(
+            cp.RegularText("Aun no hay clientes registrados"),
+            alignment=ft.alignment.center,
+            expand=True,
+        )
         self.__get_customers()
 
         btns = cp.ButtonRow([home_btn, new_btn])
 
-        self.controls = [title, btns, self.clients_lst]
+        self.controls = [title, btns, self.clients_lst, self.no_customers]
 
     def __get_customers(self) -> None:
         fb = Firebase()
@@ -50,6 +55,8 @@ class CotizacionesView(ft.View):
                         data=customer,
                     ),
                 )
+        self.clients_lst.visible = len(self.clients_lst.controls) > 0
+        self.no_customers.visible = len(self.clients_lst.controls) <= 0
 
     def __home(self, e: ft.ControlEvent) -> None:
         e.page.go("/")
@@ -80,7 +87,7 @@ class CotizacionesView(ft.View):
             if res.status == "Success":
                 self.__get_customers()
                 self.clients_lst.scroll_to(0, duration=1000)
-                self.clients_lst.update()
+                self.no_customers.update()
                 success_snackbar(e.page, res.message)
             else:
                 error_snackbar(e.page, res.message)
