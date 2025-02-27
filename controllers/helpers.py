@@ -23,3 +23,12 @@ def success_snackbar(page: ft.Page, message: str) -> None:
 def error_snackbar(page: ft.Page, message: str) -> None:
     color = "error"
     __show_snackbar(page, message, f"on{color}", color)
+
+
+def start_loading(page: ft.Page) -> None:
+    page.overlay.append(ft.ProgressBar())
+    page.update()
+
+
+def finish_loading(page: ft.Page) -> None:
+    page.overlay.pop()
