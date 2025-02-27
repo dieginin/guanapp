@@ -32,3 +32,4 @@ def start_loading(page: ft.Page) -> None:
 
 def finish_loading(page: ft.Page) -> None:
     page.overlay.pop()
+    page.update()
