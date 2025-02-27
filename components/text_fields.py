@@ -8,6 +8,7 @@ class __TextField(ft.TextField):
         self,
         value: Optional[Any] = None,
         label: Optional[str] = None,
+        aligned: Optional[bool] = False,
         autofocus: Optional[bool] = None,
         on_change: Optional[Callable] = None,
         on_click: Optional[Callable] = None,
@@ -19,6 +20,7 @@ class __TextField(ft.TextField):
         super().__init__()
         self.value = value
         self.label = label
+        self.text_align = ft.TextAlign.CENTER if aligned else None
         self.autofocus = autofocus
         self._pre_on_change = on_change
         self.on_change = self._on_change
@@ -43,6 +45,7 @@ class RegularField(__TextField):
         self,
         value: Optional[str] = None,
         label: Optional[str] = None,
+        aligned: Optional[bool] = None,
         autofocus: Optional[bool] = None,
         on_change: Optional[Callable] = None,
         on_click: Optional[Callable] = None,
@@ -54,6 +57,7 @@ class RegularField(__TextField):
         super().__init__(
             value,
             label,
+            aligned,
             autofocus,
             on_change,
             on_click,
@@ -70,6 +74,7 @@ class NameField(__TextField):
         self,
         value: Optional[str] = None,
         label: Optional[str] = None,
+        aligned: Optional[bool] = None,
         autofocus: Optional[bool] = None,
         on_change: Optional[Callable] = None,
         on_click: Optional[Callable] = None,
@@ -81,6 +86,7 @@ class NameField(__TextField):
         super().__init__(
             value,
             label,
+            aligned,
             autofocus,
             on_change,
             on_click,
@@ -102,6 +108,7 @@ class AddressField(__TextField):
         self,
         value: Optional[str] = None,
         label: Optional[str] = None,
+        aligned: Optional[bool] = None,
         autofocus: Optional[bool] = None,
         on_change: Optional[Callable] = None,
         on_click: Optional[Callable] = None,
@@ -113,6 +120,7 @@ class AddressField(__TextField):
         super().__init__(
             value,
             label,
+            aligned,
             autofocus,
             on_change,
             on_click,
@@ -134,6 +142,7 @@ class NumberField(__TextField):
         self,
         value: Optional[str] = None,
         label: Optional[str] = None,
+        aligned: Optional[bool] = None,
         autofocus: Optional[bool] = None,
         allow_float: Optional[bool] = False,
         on_change: Optional[Callable] = None,
@@ -146,6 +155,7 @@ class NumberField(__TextField):
         super().__init__(
             value,
             label,
+            aligned,
             autofocus,
             on_change,
             on_click,
@@ -165,6 +175,7 @@ class EmailField(__TextField):
         self,
         value: Optional[str] = None,
         label: Optional[str] = None,
+        aligned: Optional[bool] = None,
         autofocus: Optional[bool] = None,
         on_change: Optional[Callable] = None,
         on_click: Optional[Callable] = None,
@@ -176,6 +187,7 @@ class EmailField(__TextField):
         super().__init__(
             value,
             label,
+            aligned,
             autofocus,
             on_change,
             on_click,
