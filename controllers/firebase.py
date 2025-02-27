@@ -1,9 +1,10 @@
+from datetime import datetime
 from typing import Literal, Optional
 
 from pyrebase import pyrebase
 
 from config import FB_CONFIG
-from models import Customer
+from models import Customer, Quote
 
 
 class Response:
@@ -18,6 +19,7 @@ class Firebase:
 
     def __init__(self) -> None:
         self._cached_customers = None
+        self._cached_quotes = None
 
     def __check_customer_existence(self, name: str) -> bool:
         if not self.customers_list:
@@ -32,6 +34,10 @@ class Firebase:
         return self.__db.child("customers")
 
     @property
+    def __quotes_tb(self) -> pyrebase.Database:
+        return self.__db.child("quotes")
+
+    @property
     def customers_list(self) -> Optional[list[Customer]]:
         if self._cached_customers is None:
             try:
@@ -43,11 +49,28 @@ class Firebase:
                 pass
         return self._cached_customers
 
+    @property
+    def quotes_list(self) -> Optional[list[Quote]]:
+        if self._cached_quotes is None:
+            try:
+                self._cached_quotes = [
+                    Quote.from_dict({"folio": q.key()} | q.val())
+                    for q in self.__quotes_tb.get()
+                    if q.val() != None
+                ]
+            except:
+                pass
+        return self._cached_quotes
+
+    @property
+    def next_quote_index(self) -> int:
+        return len(self.quotes_list or []) + 1
+
     def get_customer_by_uid(self, uid: str) -> Customer:
         customer = self.__customers_tb.child(uid).get().val()
         if type(customer) == pyrebase.OrderedDict:
             return Customer.from_dict({"uid": uid} | customer)
-        return Customer("", "", "")
+        return Customer(uid, "", "")
 
     def create_customer(
         self, name: str, address: str, email: Optional[str] = None
@@ -74,3 +97,11 @@ class Firebase:
         self.__customers_tb.remove()
         self.__clear_customers_cache()
         return Response("Success", f"{deleted_amnt} clientes eliminados")
+
+    def create_quote(self, customer: Customer, concepts: list[dict]) -> Response:
+        next_quote = str(self.next_quote_index)
+        date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        self.__quotes_tb.child(next_quote).set(
+            {"customer": customer.uid, "date": date, "concepts": concepts}
+        )
+        return Response("Success", f"Cotización {next_quote} fue creada")
