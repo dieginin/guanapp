@@ -50,7 +50,11 @@ class CotizacionesView(ft.View):
             customer_quotes = [q for q in quotes if q.customer.uid == customer.uid]
             last_quote = customer_quotes[-1].date if customer_quotes else None
             customers_with_last_quote.append(
-                {"customer": customer, "last_quote": last_quote}
+                {
+                    "customer": customer,
+                    "last_quote": last_quote,
+                    "quotes": customer_quotes,
+                }
             )
 
         customers_with_last_quote.sort(
@@ -66,15 +70,27 @@ class CotizacionesView(ft.View):
                 if entry["last_quote"]
                 else "S/C"
             )
+            quotes = entry["quotes"][-1] if entry["quotes"] else None
+
             self.clients_lst.controls.insert(
                 0,
                 ft.ListTile(
                     cp.RegularText(customer.name, 32),
                     cp.RegularText(f"Última cotización: {last_quote}", 16),
                     leading=ft.Icon("person_pin", size=50),
+                    trailing=ft.PopupMenuButton(
+                        icon=ft.Icons.MORE_VERT,
+                        items=[
+                            ft.PopupMenuItem(
+                                text="Descargar última cotización",
+                                disabled=not quotes,
+                                on_click=self.__save_quote,
+                            )
+                        ],
+                    ),
                     on_click=self.__customer_click,
-                    data=customer,
-                ),  # TODO añadir accion de imprimir ultima cotizacion
+                    data=(customer, quotes),
+                ),
             )
 
         self.clients_lst.visible = len(self.clients_lst.controls) > 0
@@ -128,5 +144,10 @@ class CotizacionesView(ft.View):
 
     def __customer_click(self, e: ft.ControlEvent) -> None:
         cl.start_loading(e.page)
-        e.page.go(f"/nuevacotizacion/{e.control.data}")
+        e.page.go(f"/nuevacotizacion/{e.control.data[0]}")
         cl.finish_loading(e.page)
+
+    def __save_quote(self, e: ft.ControlEvent) -> None:
+        quote = e.control.parent.parent.data[1]
+        path = cl.Pdf().generate_quote(quote)
+        cl.success_snackbar(e.page, f"Cotización descargada en {path}")
