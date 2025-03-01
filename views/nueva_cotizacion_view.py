@@ -51,12 +51,22 @@ class NuevaCotizacionView(ft.View):
         self.__add_row()
 
         vigencia_txt = cp.RegularText("Vigencia =", 32)
-        self.vigencia_fld = cp.RegularField("60 dias", aligned=True, width=200)
+        self.vigencia_fld = cp.RegularField(
+            "60 dias", aligned=True, on_submit=self.__cotizar, width=200
+        )
         self.vigencia_fld.dense = True
+        iva_txt = cp.RegularText("IVA =", 32)
+        self.iva_fld = cp.NumberField(
+            "0", aligned=True, allow_float=True, on_submit=self.__cotizar, width=50
+        )
+        self.iva_fld.dense = True
+        self.iva_fld.max_length = 3
+
         self.total = cp.RegularText("Total = $0", 32)
         last_row = ft.Row(
             [
                 ft.Row([vigencia_txt, self.vigencia_fld]),
+                ft.Row([iva_txt, self.iva_fld]),
                 ft.Container(self.total, width=300),
             ],
             ft.MainAxisAlignment.SPACE_AROUND,
@@ -137,6 +147,8 @@ class NuevaCotizacionView(ft.View):
     def __cotizar(self, e: ft.ControlEvent) -> None:
         rows = self.datatable.rows or []
         vigency = self.__get_field_value(self.vigencia_fld) or ""
+        iva = float(self.__get_field_value(self.iva_fld) or 0)
+        iva = iva / 100 if iva > 1 else iva
 
         concepts = []
         for i, row in enumerate(rows):
@@ -172,9 +184,13 @@ class NuevaCotizacionView(ft.View):
             self.vigencia_fld.focus()
             return
 
+        if not self.iva_fld.value:
+            self.iva_fld.focus()
+            return
+
         cl.start_loading(e.page)
         fb = cl.Firebase()
-        res = fb.create_quote(self.customer, concepts, vigency)
+        res = fb.create_quote(self.customer, concepts, iva, vigency)
         cl.finish_loading(e.page)
 
         if res.status == "Success":
