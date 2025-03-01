@@ -9,7 +9,7 @@ class Concept:
     concept: str
     quantity: int
     size: str
-    price: str
+    price: float
 
     def to_dict(self) -> dict:
         return {
@@ -21,7 +21,9 @@ class Concept:
 
     @classmethod
     def from_dict(cls, data: dict) -> "Concept":
-        return cls(data["concept"], data["quantity"], data["size"], data["price"])
+        return cls(
+            data["concept"], int(data["quantity"]), data["size"], float(data["price"])
+        )
 
 
 @dataclass
