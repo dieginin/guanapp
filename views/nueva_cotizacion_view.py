@@ -194,13 +194,11 @@ class NuevaCotizacionView(ft.View):
         cl.finish_loading(e.page)
 
         if res.status == "Success":
-            cl.success_snackbar(e.page, res.message + " y guardada en el escritorio")
+            cl.success_snackbar(e.page, res.message)
             if self.customer.email:
                 self.__ask_send(e)
             else:
-                cl.start_loading(e.page)
-                e.page.go("/cotizaciones")
-                cl.finish_loading(e.page)
+                self.__ask_download(e)
         else:
             cl.error_snackbar(e.page, res.message)
 
@@ -226,10 +224,29 @@ class NuevaCotizacionView(ft.View):
                 # TODO Generar PDF y mandar correo
                 cl.error_snackbar(e.page, "Aún no se pueden enviar correos.")
 
+                cl.start_loading(e.page)
+                e.page.go("/cotizaciones")
+                cl.finish_loading(e.page)
+            else:
+                self.__ask_download(e)
+
+        dialog = self.__show_dialog(
+            e.page, "¿Quieres mandarlo por email?", email_handle
+        )
+
+    def __ask_download(self, e: ft.ControlEvent) -> None:
+        def download_handle(e: ft.ControlEvent) -> None:
+            e.page.close(dialog)
+            if e.control.text == "Si":
+                quotes = cl.Firebase().quotes_list or []
+                path = cl.Pdf().generate_quote(quotes[-1])
+
+                cl.success_snackbar(e.page, f"Cotización descargada en {path}")
+
             cl.start_loading(e.page)
             e.page.go("/cotizaciones")
             cl.finish_loading(e.page)
 
         dialog = self.__show_dialog(
-            e.page, "¿Quieres mandarlo por email?", email_handle
+            e.page, "¿Quieres descargar la cotización?", download_handle
         )
