@@ -32,13 +32,23 @@ class Quote:
     concepts: list[Concept]
     customer: Customer
     date: datetime
+    iva: float
     vigency: str
+
+    @property
+    def subtotal(self) -> float:
+        return sum(c.quantity * c.price for c in self.concepts)
+
+    @property
+    def total(self) -> float:
+        return (self.iva + 1) * self.subtotal
 
     def to_dict(self) -> dict:
         return {
             "concepts": [c.to_dict() for c in self.concepts],
             "customer": self.customer.uid,
             "date": self.date.strftime("%d/%m/%Y %H:%M:%S"),
+            "iva": self.iva,
             "vigency": self.vigency,
         }
 
@@ -51,5 +61,6 @@ class Quote:
             [Concept.from_dict(c) for c in data["concepts"]],
             Firebase().get_customer_by_uid(data["customer"]),
             datetime.strptime(data["date"], "%d/%m/%Y %H:%M:%S"),
+            data["iva"],
             data["vigency"],
         )

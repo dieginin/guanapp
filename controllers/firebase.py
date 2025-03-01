@@ -99,7 +99,7 @@ class Firebase:
         return Response("Success", f"{deleted_amnt} clientes eliminados")
 
     def create_quote(
-        self, customer: Customer, concepts: list[dict], vigency: str
+        self, customer: Customer, concepts: list[dict], iva: float, vigency: str
     ) -> Response:
         next_quote = str(self.next_quote_index)
         date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
@@ -108,6 +108,7 @@ class Firebase:
                 "customer": customer.uid,
                 "date": date,
                 "concepts": concepts,
+                "iva": iva,
                 "vigency": vigency,
             }
         )
