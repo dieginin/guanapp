@@ -297,4 +297,4 @@ class Pdf:
         c.drawCentredString(issuer_x, height - 753, f"Tel. {issuer_phone}")
 
         c.save()
-        return output_path
+        return str(output_dir)
