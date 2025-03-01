@@ -6,4 +6,5 @@ from .helpers import (
     start_loading,
     success_snackbar,
 )
+from .pdf import Pdf
 from .router import Router
