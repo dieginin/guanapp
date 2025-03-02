@@ -209,7 +209,7 @@ class NuevaCotizacionView(ft.View):
             modal=True,
             title=ft.Text(title),
             actions=[
-                ft.TextButton("Si", on_click=handle),
+                ft.TextButton("Si", on_click=handle, autofocus=True),
                 ft.TextButton("No", on_click=handle),
             ],
             actions_alignment=ft.MainAxisAlignment.CENTER,
@@ -221,8 +221,16 @@ class NuevaCotizacionView(ft.View):
         def email_handle(e: ft.ControlEvent) -> None:
             e.page.close(dialog)
             if e.control.text == "Si":
-                # TODO Generar PDF y mandar correo
-                cl.error_snackbar(e.page, "Aún no se pueden enviar correos.")
+                cl.start_loading(e.page)
+                quote = (cl.Firebase().quotes_list or [])[-1]
+                path = cl.Pdf().generate_quote(quote, save_to_disk=False)
+                res = cl.Email.send_email(quote, path)
+                cl.finish_loading(e.page)
+
+                if res.status == "Success":
+                    cl.success_snackbar(e.page, res.message)
+                else:
+                    cl.error_snackbar(e.page, res.message)
 
                 cl.start_loading(e.page)
                 e.page.go("/cotizaciones")
@@ -238,8 +246,10 @@ class NuevaCotizacionView(ft.View):
         def download_handle(e: ft.ControlEvent) -> None:
             e.page.close(dialog)
             if e.control.text == "Si":
-                quotes = cl.Firebase().quotes_list or []
-                path = cl.Pdf().generate_quote(quotes[-1])
+                cl.start_loading(e.page)
+                quote = (cl.Firebase().quotes_list or [])[-1]
+                path = cl.Pdf().generate_quote(quote)
+                cl.finish_loading(e.page)
 
                 cl.success_snackbar(e.page, f"Cotización descargada en {path}")
 
