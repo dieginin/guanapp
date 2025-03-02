@@ -1,3 +1,4 @@
+from .email import Email
 from .firebase import Firebase
 from .helpers import (
     custom_snackbar,
