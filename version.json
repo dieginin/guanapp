@@ -1,0 +1,6 @@
+{
+    "version": "0.1.0",
+    "windows": "https://github.com/dieginin/guanapp/releases/download/v0.1.0/guanapp.exe",
+    "mac": "https://github.com/dieginin/guanapp/releases/download/v0.1.0/guanapp_mac",
+    "linux": "https://github.com/dieginin/guanapp/releases/download/v0.1.0/guanapp_linux"
+}
