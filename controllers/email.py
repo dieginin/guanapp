@@ -43,7 +43,7 @@ Saludos"""
                 with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as smtp:
                     smtp.login(email, password)
                     smtp.sendmail(email, customer_email, msg.as_string())
-                return Response("Success", f"Correo enviado a {customer_email}")
+                return Response("Success", f"Cotización enviada a {customer_email}")
             except:
                 return Response("Error", f"Error al enviar el correo")
         else:
