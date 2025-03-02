@@ -9,3 +9,4 @@ from .helpers import (
 )
 from .pdf import Pdf
 from .router import Router
+from .updates import check_for_updates

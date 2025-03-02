@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+APP_VERSION = "0.1.0"
+
 G_PASSWORD = os.getenv("G_PASSWORD")
 
 FB_CONFIG = {

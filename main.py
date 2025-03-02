@@ -2,7 +2,7 @@ import locale
 
 import flet as ft
 
-from controllers import Router
+from controllers import Router, check_for_updates
 
 locale.setlocale(locale.LC_TIME, "es_ES.UTF-8")
 
@@ -12,6 +12,7 @@ class Main:
         super().__init__()
         self.page: ft.Page = page
         Router(self.page)
+        check_for_updates(self.page)
 
         self.__init_window__()
 
