@@ -1,16 +1,10 @@
 from datetime import datetime
-from typing import Literal, Optional
+from typing import Optional
 
 from pyrebase import pyrebase
 
 from config import FB_CONFIG
-from models import Customer, Quote
-
-
-class Response:
-    def __init__(self, status: Literal["Success", "Error"], message: str) -> None:
-        self.status = status
-        self.message = message
+from models import Customer, Quote, Response
 
 
 class Firebase:
