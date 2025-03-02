@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+G_PASSWORD = os.getenv("G_PASSWORD")
+
 FB_CONFIG = {
     "apiKey": os.getenv("DB_KEY"),
     "authDomain": f"{os.getenv("PROJECTID")}.firebaseapp.com",
