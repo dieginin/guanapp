@@ -1,3 +1,4 @@
+import tempfile
 from pathlib import Path
 
 from reportlab.lib import colors
@@ -13,6 +14,16 @@ from models import Quote
 
 
 class Pdf:
+    @staticmethod
+    def __getOutoutPath(filename: str, save_to_disk: bool) -> str:
+        if save_to_disk:
+            desktop_path = Path.home() / "Desktop" / "Cotizaciones"
+            desktop_path.mkdir(parents=True, exist_ok=True)
+            return str(desktop_path / filename)
+        else:
+            temp_dir = Path(tempfile.mkdtemp())
+            return str(temp_dir / filename)
+
     def __drawBasedCenteredText(
         self,
         c: Canvas,
@@ -58,7 +69,7 @@ class Pdf:
         c.setFont(font2, size2)
         c.drawString(second_x, y, second_text)
 
-    def generate_quote(self, quote: Quote) -> str:
+    def generate_quote(self, quote: Quote, save_to_disk: bool = True) -> str:
         issuer_name = "Marcelo Renato Balestra Lemus"
         issuer_short_name = "Marcelo Balestra"
         issuer_phone = "461 147 7068"
@@ -71,16 +82,9 @@ class Pdf:
         page_size = letter
         width, height = page_size
 
-        desktop = Path.home() / "Desktop"
-        output_dir = desktop / "Cotizaciones"
-        if not output_dir.exists():
-            output_dir.mkdir()
-
         quote_number = f"{quote.folio}{str(quote.date.year)[-2:]}{quote.date.month}{quote.date.day}"
-        output_path = str(
-            output_dir
-            / f"COTIZACIÓN {quote_number} {quote.customer.name.split()[0]}.pdf"
-        )
+        filename = f"COTIZACIÓN {quote_number} {quote.customer.name.split()[0]}.pdf"
+        output_path = self.__getOutoutPath(filename, save_to_disk)
 
         c = Canvas(output_path, pagesize=page_size)
 
@@ -296,4 +300,4 @@ class Pdf:
         c.drawCentredString(issuer_x, height - 753, f"Tel. {issuer_phone}")
 
         c.save()
-        return str(output_dir)
+        return output_path
