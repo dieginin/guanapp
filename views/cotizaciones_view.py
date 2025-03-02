@@ -85,7 +85,12 @@ class CotizacionesView(ft.View):
                                 text="Descargar última cotización",
                                 disabled=not quotes,
                                 on_click=self.__save_quote,
-                            )
+                            ),
+                            ft.PopupMenuItem(
+                                text="Enviar última cotización",
+                                disabled=not quotes or not customer.email,
+                                on_click=self.__send_quote,
+                            ),
                         ],
                     ),
                     on_click=self.__customer_click,
@@ -151,3 +156,15 @@ class CotizacionesView(ft.View):
         quote = e.control.parent.parent.data[1]
         path = cl.Pdf().generate_quote(quote)
         cl.success_snackbar(e.page, f"Cotización descargada en {path}")
+
+    def __send_quote(self, e: ft.ControlEvent) -> None:
+        quote = e.control.parent.parent.data[1]
+        cl.start_loading(e.page)
+        path = cl.Pdf().generate_quote(quote, save_to_disk=False)
+        res = cl.Email.send_email(quote, path)
+        cl.finish_loading(e.page)
+
+        if res.status == "Success":
+            cl.success_snackbar(e.page, res.message)
+        else:
+            cl.error_snackbar(e.page, res.message)
